@@ -33,6 +33,12 @@ const bookSchema = new mongoose.Schema(
       type: Number,
       required: true,
       default: 1,
+      validate: {
+        validator: function (value) {
+          return value <= this.totalCopies;
+        },
+        message: "Available copies cannot exceed total copies",
+      },
     },
     genre: {
       type: mongoose.Schema.Types.ObjectId,
