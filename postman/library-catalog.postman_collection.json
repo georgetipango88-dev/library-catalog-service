@@ -1,0 +1,356 @@
+{
+  "info": {
+    "_postman_id": "06baf453-4cee-48ee-b1db-db0f843dff5f",
+    "name": "Library Catalog API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58422284",
+    "_collection_link": "https://go.postman.co/collection/58422284-06baf453-4cee-48ee-b1db-db0f843dff5f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Create Genre",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\r\n{\r\n  \"name\": \"Historical Fiction\",\r\n  \"slug\": \"historical-fiction\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/genres",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["genres"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Validation Error.",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"\",\r\n  \"slug\": \"\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/genres",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["genres"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Genres.",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/genres",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["genres"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Genre by ID.",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/genres/6ac8ce5e73a6a3ae821f47c9",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["genres", "6ac8ce5e73a6a3ae821f47c9"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Genre.",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Historical Novels\",\r\n  \"slug\": \"historical-novels\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/genres/6ac8ce5e73a6a3ae821f47c9",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["genres", "6ac8ce5e73a6a3ae821f47c9"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Genre",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/genres/6ac8ce5e73a6a3ae821f47c9",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["genres", "6ac8ce5e73a6a3ae821f47c9"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Books.",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/books",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["books"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search Books.",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/books?search=becoming",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["books"],
+          "query": [
+            {
+              "key": "search",
+              "value": "becoming"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Books - Pagination.",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/books?page=2&limit=5",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["books"],
+          "query": [
+            {
+              "key": "page",
+              "value": "2"
+            },
+            {
+              "key": "limit",
+              "value": "5"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Filter Books by Genre.",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/books?genre=6ac36711fadb134e3983033e",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["books"],
+          "query": [
+            {
+              "key": "genre",
+              "value": "6ac36711fadb134e3983033e"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Combined Book Filters.",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/books?genre=6ac36711fadb134e3983033e&search=becoming&page=1&limit=5",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["books"],
+          "query": [
+            {
+              "key": "genre",
+              "value": "6ac36711fadb134e3983033e"
+            },
+            {
+              "key": "search",
+              "value": "becoming"
+            },
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "5"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Book Validation Error.",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/books",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["books"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Book.",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\r\n{\r\n  \"title\": \"The Power of Habit\",\r\n  \"author\": \"Charles Duhigg\",\r\n  \"isbn\": \"9780812981605\",\r\n  \"description\": \"A book exploring the science of habits and how they influence everyday life.\",\r\n  \"coverImage\": \"https://example.com/images/power-of-habit.jpg\",\r\n  \"totalCopies\": 5,\r\n  \"availableCopies\": 5,\r\n  \"genre\": \"6ac36711fadb134e3983033e\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/books",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["books"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Book by ID.",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/books/6ac36712fadb134e3983034d",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["books", "6ac36712fadb134e3983034d"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Book.",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\r\n{\r\n  \"availableCopies\": 4\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:5000/books/6ac36712fadb134e3983034d",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["books", "6ac36712fadb134e3983034d"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Book.",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/books/6ac8fc0263869be8a274728a",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["books", "6ac8fc0263869be8a274728a"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    }
+  ]
+}
