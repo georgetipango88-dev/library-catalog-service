@@ -4,8 +4,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 
 // Import routes
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/users");
 const genreRoutes = require("./routes/genres");
 const bookRoutes = require("./routes/books");
 
@@ -17,8 +20,9 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Global middleware
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
+app.use(cookieParser());
 app.use(morgan("dev"));
 
 // Home route
@@ -29,10 +33,20 @@ app.get("/", (req, res) => {
   });
 });
 
-// Genre CRUD routes
+// Auth routes (supports /api/auth and /auth)
+app.use("/api/auth", authRoutes);
+app.use("/auth", authRoutes);
+
+// User profile routes (supports /api/users and /users)
+app.use("/api/users", userRoutes);
+app.use("/users", userRoutes);
+
+// Genre CRUD routes (supports /api/genres and /genres)
+app.use("/api/genres", genreRoutes);
 app.use("/genres", genreRoutes);
 
-// Book CRUD routes
+// Book CRUD routes (supports /api/books and /books)
+app.use("/api/books", bookRoutes);
 app.use("/books", bookRoutes);
 
 // Handle unknown endpoints
@@ -67,4 +81,8 @@ async function startServer() {
   }
 }
 
-startServer();
+if (require.main === module) {
+  startServer();
+}
+
+module.exports = app;

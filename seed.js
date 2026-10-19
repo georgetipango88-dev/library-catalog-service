@@ -3,6 +3,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const Genre = require("./models/Genre");
 const Book = require("./models/Book");
+const User = require("./models/User");
 
 const seedDatabase = async () => {
   try {
@@ -18,8 +19,27 @@ const seedDatabase = async () => {
     // Clear existing data so the seed script can be safely re-run
     await Book.deleteMany({});
     await Genre.deleteMany({});
+    await User.deleteMany({});
 
-    console.log("Existing books and genres cleared");
+    console.log("Existing books, genres, and users cleared");
+
+    // Seed exactly one librarian account with a known test password
+    const librarian = await User.create({
+      username: "librarian",
+      email: "librarian@library.org",
+      password: "Librarian@12345",
+      role: "librarian",
+    });
+
+    // Seed one test patron account
+    const patron = await User.create({
+      username: "patron",
+      email: "patron@library.org",
+      password: "Patron@12345",
+      role: "patron",
+    });
+
+    console.log(`Seeded 1 librarian (${librarian.email}) and 1 patron (${patron.email})`);
 
     // Create genres
     const genres = await Genre.insertMany([
@@ -223,7 +243,7 @@ const seedDatabase = async () => {
 
     // Display a short summary
     console.log(
-      `Seeded ${genres.length} genres and ${insertedBooks.length} books`,
+      `Seeded ${genres.length} genres, ${insertedBooks.length} books, and 1 librarian account`,
     );
   } catch (error) {
     console.error("Error seeding database:", error);

@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Book = require("../models/Book");
+const { requireAuth, requireRole } = require("../middleware/auth");
 
 const {
   validate,
@@ -24,7 +25,7 @@ const validId = (req, res, next) => {
   next();
 };
 
-// GET /books - Filtering, searching, pagination
+// GET /books - Filtering, searching, pagination (Public)
 router.get(
   "/",
   asyncHandler(async (req, res) => {
@@ -86,7 +87,7 @@ router.get(
   }),
 );
 
-// GET /books/:id
+// GET /books/:id (Public)
 router.get(
   "/:id",
   validId,
@@ -104,9 +105,11 @@ router.get(
   }),
 );
 
-// POST /books
+// POST /books (Protected: Librarian Only)
 router.post(
   "/",
+  requireAuth,
+  requireRole("librarian"),
   bookCreateRules,
   validate,
   asyncHandler(async (req, res) => {
@@ -119,9 +122,11 @@ router.post(
   }),
 );
 
-// PUT /books/:id
+// PUT /books/:id (Protected: Librarian Only)
 router.put(
   "/:id",
+  requireAuth,
+  requireRole("librarian"),
   validId,
   bookUpdateRules,
   validate,
@@ -177,9 +182,11 @@ router.put(
   }),
 );
 
-// DELETE /books/:id
+// DELETE /books/:id (Protected: Librarian Only)
 router.delete(
   "/:id",
+  requireAuth,
+  requireRole("librarian"),
   validId,
   asyncHandler(async (req, res) => {
     const book = await Book.findByIdAndDelete(req.params.id);

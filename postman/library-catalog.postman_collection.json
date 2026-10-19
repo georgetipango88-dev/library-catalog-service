@@ -1,356 +1,459 @@
 {
   "info": {
     "_postman_id": "06baf453-4cee-48ee-b1db-db0f843dff5f",
-    "name": "Library Catalog API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "58422284",
-    "_collection_link": "https://go.postman.co/collection/58422284-06baf453-4cee-48ee-b1db-db0f843dff5f?source=collection_link"
+    "name": "Library Catalog Service - Week 4 Auth & RBAC",
+    "description": "Postman collection covering Authentication, Role-Based Access Control (RBAC), User Profiles, and Catalog Management with automatic JWT environment variable persistence.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "patron_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
   "item": [
     {
-      "name": "Create Genre",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "\r\n{\r\n  \"name\": \"Historical Fiction\",\r\n  \"slug\": \"historical-fiction\"\r\n}\r\n",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:5000/genres",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["genres"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Validation Error.",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"name\": \"\",\r\n  \"slug\": \"\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:5000/genres",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["genres"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get All Genres.",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:5000/genres",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["genres"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get Genre by ID.",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:5000/genres/6ac8ce5e73a6a3ae821f47c9",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["genres", "6ac8ce5e73a6a3ae821f47c9"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Update Genre.",
-      "request": {
-        "method": "PUT",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"name\": \"Historical Novels\",\r\n  \"slug\": \"historical-novels\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:5000/genres/6ac8ce5e73a6a3ae821f47c9",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["genres", "6ac8ce5e73a6a3ae821f47c9"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Delete Genre",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:5000/genres/6ac8ce5e73a6a3ae821f47c9",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["genres", "6ac8ce5e73a6a3ae821f47c9"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get All Books.",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:5000/books",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["books"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Search Books.",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:5000/books?search=becoming",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["books"],
-          "query": [
-            {
-              "key": "search",
-              "value": "becoming"
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get Books - Pagination.",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:5000/books?page=2&limit=5",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["books"],
-          "query": [
-            {
-              "key": "page",
-              "value": "2"
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register Patron (POST /api/auth/register)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"new_patron\",\n  \"email\": \"new_patron@example.com\",\n  \"password\": \"PatronPass123!\"\n}"
             },
-            {
-              "key": "limit",
-              "value": "5"
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
             }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Filter Books by Genre.",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:5000/books?genre=6ac36711fadb134e3983033e",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["books"],
-          "query": [
-            {
-              "key": "genre",
-              "value": "6ac36711fadb134e3983033e"
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Combined Book Filters.",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:5000/books?genre=6ac36711fadb134e3983033e&search=becoming&page=1&limit=5",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["books"],
-          "query": [
-            {
-              "key": "genre",
-              "value": "6ac36711fadb134e3983033e"
-            },
-            {
-              "key": "search",
-              "value": "becoming"
-            },
-            {
-              "key": "page",
-              "value": "1"
-            },
-            {
-              "key": "limit",
-              "value": "5"
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Book Validation Error.",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "http://localhost:5000/books",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["books"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create Book.",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "\r\n{\r\n  \"title\": \"The Power of Habit\",\r\n  \"author\": \"Charles Duhigg\",\r\n  \"isbn\": \"9780812981605\",\r\n  \"description\": \"A book exploring the science of habits and how they influence everyday life.\",\r\n  \"coverImage\": \"https://example.com/images/power-of-habit.jpg\",\r\n  \"totalCopies\": 5,\r\n  \"availableCopies\": 5,\r\n  \"genre\": \"6ac36711fadb134e3983033e\"\r\n}\r\n",
-          "options": {
-            "raw": {
-              "language": "json"
+        {
+          "name": "Login Librarian (Auto-save JWT Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.environment.set(\"jwt_token\", jsonData.token);",
+                  "    pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
+                  "    console.log(\"Librarian JWT token saved:\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
             }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:5000/books",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["books"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get Book by ID.",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:5000/books/6ac36712fadb134e3983034d",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["books", "6ac36712fadb134e3983034d"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Update Book.",
-      "request": {
-        "method": "PUT",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "\r\n{\r\n  \"availableCopies\": 4\r\n}\r\n",
-          "options": {
-            "raw": {
-              "language": "json"
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"librarian@library.org\",\n  \"password\": \"Librarian@12345\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
             }
-          }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "http://localhost:5000/books/6ac36712fadb134e3983034d",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["books", "6ac36712fadb134e3983034d"]
+        {
+          "name": "Login Patron (Auto-save Patron Token)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.environment.set(\"patron_token\", jsonData.token);",
+                  "    pm.collectionVariables.set(\"patron_token\", jsonData.token);",
+                  "    console.log(\"Patron JWT token saved:\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"patron@library.org\",\n  \"password\": \"Patron@12345\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout (POST /api/auth/logout)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "Delete Book.",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:5000/books/6ac8fc0263869be8a274728a",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "5000",
-          "path": ["books", "6ac8fc0263869be8a274728a"]
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get User Profile - Librarian (GET /api/users/profile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Profile - Patron (GET /api/users/profile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{patron_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Profile - 401 Unauthorized (No Token)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/profile",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "profile"]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "New Request",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": ""
+      "name": "Books",
+      "item": [
+        {
+          "name": "Get All Books (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": ["{{base_url}}"],
+              "path": ["books"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Books (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books?search=becoming",
+              "host": ["{{base_url}}"],
+              "path": ["books"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "becoming"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Books - Pagination (Public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/books?page=2&limit=5",
+              "host": ["{{base_url}}"],
+              "path": ["books"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Book - 401 Unauthorized (No Token)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Unauthorized Book Attempt\",\n  \"author\": \"Anonymous\",\n  \"isbn\": \"9780000000001\",\n  \"description\": \"Should be rejected with 401.\",\n  \"totalCopies\": 3,\n  \"availableCopies\": 3,\n  \"genre\": \"REPLACE_WITH_VALID_GENRE_ID\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": ["{{base_url}}"],
+              "path": ["books"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Book - 403 Forbidden (Patron Token)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{patron_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Forbidden Book Attempt by Patron\",\n  \"author\": \"Patron User\",\n  \"isbn\": \"9780000000002\",\n  \"description\": \"Patrons cannot mutate the catalog. Expected 403.\",\n  \"totalCopies\": 3,\n  \"availableCopies\": 3,\n  \"genre\": \"REPLACE_WITH_VALID_GENRE_ID\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": ["{{base_url}}"],
+              "path": ["books"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Book - 201 Success (Librarian Token)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"The Pragmatic Programmer\",\n  \"author\": \"David Thomas, Andrew Hunt\",\n  \"isbn\": \"9780135957059\",\n  \"description\": \"Your journey to mastery in software development.\",\n  \"coverImage\": \"https://example.com/pragmatic.jpg\",\n  \"totalCopies\": 5,\n  \"availableCopies\": 5,\n  \"genre\": \"REPLACE_WITH_VALID_GENRE_ID\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/books",
+              "host": ["{{base_url}}"],
+              "path": ["books"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Book - 403 Forbidden (Patron Token)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{patron_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"availableCopies\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/books/REPLACE_WITH_BOOK_ID",
+              "host": ["{{base_url}}"],
+              "path": ["books", "REPLACE_WITH_BOOK_ID"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Book - 200 Success (Librarian Token)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"availableCopies\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/books/REPLACE_WITH_BOOK_ID",
+              "host": ["{{base_url}}"],
+              "path": ["books", "REPLACE_WITH_BOOK_ID"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Book - 403 Forbidden (Patron Token)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{patron_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/books/REPLACE_WITH_BOOK_ID",
+              "host": ["{{base_url}}"],
+              "path": ["books", "REPLACE_WITH_BOOK_ID"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Book - 200 Success (Librarian Token)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/books/REPLACE_WITH_BOOK_ID",
+              "host": ["{{base_url}}"],
+              "path": ["books", "REPLACE_WITH_BOOK_ID"]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
+    },
+    {
+      "name": "Genres",
+      "item": [
+        {
+          "name": "Get All Genres",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/genres",
+              "host": ["{{base_url}}"],
+              "path": ["genres"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Genre",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cyberpunk\",\n  \"slug\": \"cyberpunk\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/genres",
+              "host": ["{{base_url}}"],
+              "path": ["genres"]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }
